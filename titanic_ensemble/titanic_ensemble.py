@@ -116,3 +116,36 @@ dataset["Fare"] = dataset["Fare"].map(lambda i:np.log(i) if i > 0 else 0)
 g = sns.distplot(dataset["Fare"], color = "b", label = "Skewness : %.2f"%(dataset["Fare"].skew()))
 g = g.legend(loc = "best")
 
+# 3.2 Categorical values
+#Sex
+g = sns.barplot(x="Sex",y="Survived",data=train)
+g = g.set_ylabel("Survival Probability")
+train[["Sex", "Survived"]].groupby("Sex").mean()
+
+# Passenger Class
+g = sns.factorplot(x = "Pclass", y = "Survived", data = train, kind = "bar", size = 6, palette = "muted")
+g = g.despine(left = True)
+g = g.set_ylabels("Survival Probability")
+
+# Pclass and Sex
+g = sns.factorplot(x="Pclass", y="Survived", hue="Sex", data=train,
+                   size=6, kind="bar", palette="muted")
+g.despine(left=True)
+g = g.set_ylabels("survival probability")
+
+# Embarked
+dataset["Embarked"].isnull().sum()
+dataset["Embarked"] = dataset["Embarked"].fillna("S")
+
+g = sns.factorplot(x = "Embarked", y = 'Survived', data = train, size = 6, kind = 'bar', palette = 'muted')
+g.despine(left = True)
+g = g.set_ylabels('survivability')
+
+# Explore Pclass vs Embarked 
+g = sns.factorplot("Pclass", col="Embarked",  data=train,
+                   size=6, kind="count", palette="muted")
+g.despine(left=True)
+g = g.set_ylabels("Count")
+
+# Fill missing values
+# age
