@@ -149,3 +149,29 @@ g = g.set_ylabels("Count")
 
 # Fill missing values
 # age
+g = sns.factorplot(y = "Age", x = "Sex" , data = dataset, kind = 'box')
+g = sns.factorplot(y = "Age", x = "Sex" , hue = "Pclass", data = dataset, kind = 'box')
+g = sns.factorplot(y = "Age", x = "Parch", data = dataset, kind = "box")
+g = sns.factorplot(y = "Age", x = "SibSp", data = dataset, kind = "box")
+
+dataset["Sex"] = dataset["Sex"].map({"male": 0, "female": 1})
+g = sns.heatmap(dataset[["Age","Sex", "SibSp", "Parch", "Pclass"]].corr(), cmap = "BrBG", annot = True)
+
+index_nan_age = list(dataset["Age"][dataset["Age"].isnull()].index)
+for i in index_nan_age:
+    age_med = dataset["Age"].median()
+    age_pred = dataset["Age"][((dataset["SibSp"] == dataset.iloc[i]["SibSp"]) & 
+                      (dataset["Parch"] == dataset.iloc[i]["Parch"]) & 
+                      (dataset["Pclass"] == dataset.iloc[i]["Pclass"]))].median()
+    if not np.isnan(age_pred):
+        dataset["Age"].iloc[i] = age_pred
+    else:
+        dataset["Age"].iloc[i] = age_med
+        
+g = sns.factorplot(x = "Survived", y = "Age", data = train, kind = "box")
+g = sns.factorplot(x = "Survived", y = "Age", data = train, kind = 'violin')
+
+# engine feature
+# name
+
+dataset_title = [i.split(",")[1].split(".")[0].strip() for i in dataset["Name"]]
